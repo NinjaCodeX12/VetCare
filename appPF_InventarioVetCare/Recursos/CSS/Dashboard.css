@@ -1,0 +1,41 @@
+﻿body {
+    background: #f5f6fa;
+}
+
+.sidebar {
+    height: 100vh;
+    background: #4e73df;
+    color: white;
+    padding-top: 20px;
+}
+
+.sidebar a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 12px;
+}
+
+.sidebar a:hover {
+            background: #2e59d9;
+}
+
+.card-dashboard {
+    border-left: 5px solid;
+}
+
+.border-primary {
+    border-color: #4e73df !important;
+}
+
+.border-success {
+    border-color: #1cc88a !important;
+}
+
+.border-warning {
+    border-color: #f6c23e !important;
+}
+
+.border-danger {
+    border-color: #e74a3b !important;
+}
