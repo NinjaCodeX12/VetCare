@@ -1,41 +1,71 @@
 ﻿body {
-    background: #f5f6fa;
+    margin: 0;
+    background: #f4f6f9;
+    font-family: Segoe UI;
 }
+
+/* SIDEBAR */
 
 .sidebar {
-    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100%;
     background: #4e73df;
-    color: white;
     padding-top: 20px;
+    color: white;
 }
 
-.sidebar a {
+    .sidebar .logo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .sidebar a {
+        display: block;
         color: white;
         text-decoration: none;
-        display: block;
-        padding: 12px;
-}
+        padding: 12px 20px;
+    }
 
-.sidebar a:hover {
+        .sidebar a:hover {
             background: #2e59d9;
+        }
+
+    .sidebar i {
+        margin-right: 10px;
+    }
+
+/* MAIN */
+
+.main {
+    margin-left: 220px;
 }
 
-.card-dashboard {
-    border-left: 5px solid;
+/* TOPBAR */
+
+.topbar {
+    height: 60px;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.border-primary {
-    border-color: #4e73df !important;
+.buscador input {
+    padding: 5px;
+    border: 1px solid #ccc;
 }
 
-.border-success {
-    border-color: #1cc88a !important;
+.usuario i {
+    margin-right: 15px;
 }
 
-.border-warning {
-    border-color: #f6c23e !important;
-}
+/* TARJETAS */
 
-.border-danger {
-    border-color: #e74a3b !important;
+.card {
+    border-radius: 10px;
 }
