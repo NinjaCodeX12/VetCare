@@ -1,110 +1,183 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="appPF_InventarioVetCare.Dashboard" %>
 
 <!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta charset="utf-8" />
+
     <title>Dashboard VetCare</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link href="Recursos/CSS/Dashboard.css" rel="stylesheet" />
 
 </head>
 
 <body>
 
-    <form id="form1" runat="server">
+    <form runat="server">
 
         <div class="container-fluid">
+
             <div class="row">
 
-                <!-- MENU -->
+                <!-- SIDEBAR -->
 
-                <div class="col-md-2 sidebar">
+                <div class="col-md-2 bg-primary text-white min-vh-100 p-3">
 
-                    <h4 class="text-center">VetCare</h4>
+                    <h4 class="text-center mb-4">VetCare</h4>
 
-                    <hr />
+                    <ul class="nav flex-column">
 
-                    <a onclick="mostrarInicio()">
-                        <i class="fa fa-home"></i>Inicio
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" onclick="mostrarInicio()">
+                                <i class="fa fa-home me-2"></i>Inicio
                     </a>
+                        </li>
 
-                    <a onclick="cargarPagina('Login.aspx')">
-                        <i class="fa fa-box"></i>Productos
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" onclick="cargarPagina('Productos.aspx')">
+                                <i class="fa fa-box me-2"></i>Productos
                     </a>
+                        </li>
 
-                    <a onclick="cargarPagina('Proveedores.aspx')">
-                        <i class="fa fa-truck"></i>Proveedores
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" onclick="cargarPagina('Proveedores.aspx')">
+                                <i class="fa fa-truck me-2"></i>Proveedores
                     </a>
+                        </li>
 
-                    <a onclick="cargarPagina('Clientes.aspx')">
-                        <i class="fa fa-users"></i>Clientes
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" onclick="cargarPagina('Clientes.aspx')">
+                                <i class="fa fa-users me-2"></i>Clientes
                     </a>
+                        </li>
 
-                    <a onclick="cargarPagina('Entradas.aspx')">
-                        <i class="fa fa-arrow-down"></i>Entradas
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" onclick="cargarPagina('Entradas.aspx')">
+                                <i class="fa fa-arrow-down me-2"></i>Entradas
                     </a>
+                        </li>
 
-                    <a onclick="cargarPagina('Salidas.aspx')">
-                        <i class="fa fa-arrow-up"></i>Salidas
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" onclick="cargarPagina('Salidas.aspx')">
+                                <i class="fa fa-arrow-up me-2"></i>Salidas
                     </a>
+                        </li>
 
-                    <a onclick="cargarPagina('Reportes.aspx')">
-                        <i class="fa fa-file"></i>Reportes
+                        <li class="nav-item mb-2">
+                            <a class="nav-link text-white" onclick="cargarPagina('Reportes.aspx')">
+                                <i class="fa fa-file me-2"></i>Reportes
                     </a>
+                        </li>
+
+                    </ul>
 
                 </div>
 
                 <!-- CONTENIDO -->
 
-                <div class="col-md-10 p-4">
+                <div class="col-md-10">
 
-                    <div id="inicio">
+                    <!-- NAVBAR -->
 
-                        <h2 class="mb-4">Dashboard Inventario VetCare</h2>
+                    <nav class="navbar navbar-light bg-light shadow-sm">
 
-                        <!-- TARJETAS -->
+                        <div class="container-fluid">
+
+                            <form class="d-flex">
+
+                                <input class="form-control me-2" type="search" placeholder="Buscar" />
+
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-search"></i>
+                                </button>
+
+                            </form>
+
+                            <span class="navbar-text">
+                                <i class="fa fa-bell me-3"></i>
+                                <i class="fa fa-envelope me-3"></i>
+                                Admin
+                            </span>
+
+                        </div>
+
+                    </nav>
+
+                    <!-- DASHBOARD -->
+
+                    <div class="container mt-4" id="inicio">
+
+                        <h3 class="mb-4">Dashboard Inventario VetCare</h3>
 
                         <div class="row g-4">
 
                             <div class="col-md-3">
-                                <div class="card shadow border-primary">
+
+                                <div class="card border-primary shadow-sm">
+
                                     <div class="card-body">
+
                                         <h6>Total Productos</h6>
+
                                         <h3>
                                             <asp:Label ID="lblProductos" runat="server" Text="120"></asp:Label>
                                         </h3>
+
                                     </div>
+
                                 </div>
+
                             </div>
 
                             <div class="col-md-3">
-                                <div class="card shadow border-success">
+
+                                <div class="card border-success shadow-sm">
+
                                     <div class="card-body">
+
                                         <h6>Stock Disponible</h6>
+
                                         <h3>85</h3>
+
                                     </div>
+
                                 </div>
+
                             </div>
 
                             <div class="col-md-3">
-                                <div class="card shadow border-warning">
+
+                                <div class="card border-warning shadow-sm">
+
                                     <div class="card-body">
+
                                         <h6>Stock Bajo</h6>
+
                                         <h3>10</h3>
+
                                     </div>
+
                                 </div>
+
                             </div>
 
                             <div class="col-md-3">
-                                <div class="card shadow border-danger">
+
+                                <div class="card border-danger shadow-sm">
+
                                     <div class="card-body">
+
                                         <h6>Movimientos Hoy</h6>
+
                                         <h3>25</h3>
+
                                     </div>
+
                                 </div>
+
                             </div>
 
                         </div>
@@ -115,14 +188,17 @@
 
                             <div class="col-md-8">
 
-                                <div class="card shadow">
+                                <div class="card shadow-sm">
 
                                     <div class="card-header">
                                         Movimientos de Inventario
+
                                     </div>
 
                                     <div class="card-body">
+
                                         <canvas id="graficoInventario"></canvas>
+
                                     </div>
 
                                 </div>
@@ -131,42 +207,16 @@
 
                             <div class="col-md-4">
 
-                                <div class="card shadow">
+                                <div class="card shadow-sm">
 
                                     <div class="card-header">
                                         Categoría Productos
+
                                     </div>
 
                                     <div class="card-body">
+
                                         <canvas id="graficoCategorias"></canvas>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- TABLA -->
-
-                        <div class="row mt-4">
-
-                            <div class="col-md-12">
-
-                                <div class="card shadow">
-
-                                    <div class="card-header">
-                                        Últimos Movimientos
-                                    </div>
-
-                                    <div class="card-body">
-
-                                        <asp:GridView
-                                            ID="gvMovimientos"
-                                            runat="server"
-                                            CssClass="table table-striped"
-                                            AutoGenerateColumns="true">
-                                        </asp:GridView>
 
                                     </div>
 
@@ -177,12 +227,6 @@
                         </div>
 
                     </div>
-
-                    <!-- AREA DONDE CARGAN OTRAS PAGINAS -->
-
-                    <div id="contenido" style="display: none">
-
-                        <iframe id="framePagina" style="width: 100%; height: 800px; border: none;"></iframe>
 
                     </div>
 
@@ -190,28 +234,11 @@
 
             </div>
 
-        </div>
-
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-
-        function cargarPagina(pagina) {
-
-            document.getElementById("inicio").style.display = "none";
-            document.getElementById("contenido").style.display = "block";
-            document.getElementById("framePagina").src = pagina;
-
-        }
-
-        function mostrarInicio() {
-
-            document.getElementById("inicio").style.display = "block";
-            document.getElementById("contenido").style.display = "none";
-
-        }
 
         var ctx = document.getElementById('graficoInventario');
 
@@ -221,8 +248,7 @@
                 labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
                 datasets: [{
                     label: 'Movimientos',
-                    data: [40, 55, 60, 45, 70],
-                    borderWidth: 3
+                    data: [40, 55, 60, 45, 70]
                 }]
             }
         });
