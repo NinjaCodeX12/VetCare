@@ -43,6 +43,15 @@
                     color: white;
                 }
 
+        /* TITULOS DEL MENU */
+        .menu-title {
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            padding: 10px 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
         .navbar-custom {
             background: #0a1f44;
             padding: 10px 20px;
@@ -86,7 +95,6 @@
             border-radius: 10px;
         }
 
-        /* IFRAME */
         #frameContenido {
             width: 100%;
             height: calc(100vh - 120px);
@@ -109,82 +117,87 @@
 
                     <ul class="nav flex-column">
 
+                        <li class="menu-title">GENERAL</li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="mostrarInicio()">
                                 <i class="fa fa-home me-2"></i>Inicio
                             </a>
                         </li>
 
+                        <li class="menu-title">GESTIÓN</li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="cargarPagina('Productos.aspx')">
                                 <i class="fa fa-box me-2"></i>Productos
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="cargarPagina('Categorias.aspx')">
+                                <i class="fa fa-tags me-2"></i>Categorías
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="cargarPagina('Proveedores.aspx')">
                                 <i class="fa fa-truck me-2"></i>Proveedores
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="cargarPagina('Clientes.aspx')">
                                 <i class="fa fa-users me-2"></i>Clientes
                             </a>
                         </li>
 
+                        <li class="menu-title">INVENTARIO</li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="cargarPagina('Entradas.aspx')">
-                                <i class="fa fa-arrow-down me-2"></i>Entradas
+                            <a class="nav-link" href="#" onclick="cargarPagina('Movimientos.aspx')">
+                                <i class="fa fa-exchange-alt me-2"></i>Movimientos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="cargarPagina('AjustesInventario.aspx')">
+                                <i class="fa fa-clipboard-list me-2"></i>Ajustes
                             </a>
                         </li>
 
+                        <li class="menu-title">ADMIN</li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="cargarPagina('Salidas.aspx')">
-                                <i class="fa fa-arrow-up me-2"></i>Salidas
+                            <a class="nav-link" href="#" onclick="cargarPagina('Empleados.aspx')">
+                                <i class="fa fa-user-tie me-2"></i>Empleados
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="cargarPagina('Usuarios.aspx')">
+                                <i class="fa fa-user-cog me-2"></i>Usuarios
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="cargarPagina('Reportes.aspx')">
-                                <i class="fa fa-file me-2"></i>Reportes
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="Login.aspx">
-                                <i class="fa fa-sign-in-alt me-2"></i>Login
+                        <li class="nav-item mt-3">
+                            <a class="nav-link text-danger" href="Login.aspx">
+                                <i class="fa fa-sign-out-alt me-2"></i>Cerrar Sesión
                             </a>
                         </li>
 
                     </ul>
+
                 </div>
 
                 <!-- CONTENIDO -->
                 <div class="col-md-10 main-content">
 
-                    <!-- NAVBAR -->
                     <nav class="navbar navbar-expand-lg navbar-custom shadow-sm">
-
                         <div class="container-fluid">
 
                             <div class="d-flex w-100 align-items-center justify-content-between">
 
                                 <div class="d-flex">
-
                                     <input class="form-control me-2 busqueda" type="search" placeholder="Buscar productos..." />
-
                                     <button class="btn btn-buscar" type="button">
                                         <i class="fa fa-search"></i>
                                     </button>
-
                                 </div>
 
                                 <div class="text-white d-flex align-items-center">
-
-                                    <i class="fa fa-bell me-4" style="cursor: pointer"></i>
-
-                                    <i class="fa fa-envelope me-4" style="cursor: pointer"></i>
+                                    <i class="fa fa-bell me-4"></i>
+                                    <i class="fa fa-envelope me-4"></i>
 
                                     <div class="d-flex align-items-center">
                                         <span class="me-2">Admin</span>
@@ -192,11 +205,11 @@
                                     </div>
 
                                 </div>
+
                             </div>
                         </div>
                     </nav>
 
-                    <!-- DASHBOARD -->
                     <div class="dashboard-container" id="inicio">
 
                         <div id="panelInicio">
@@ -269,7 +282,6 @@
 
                         </div>
 
-                        <!-- CONTENIDO DINAMICO -->
                         <iframe id="frameContenido" style="display: none;"></iframe>
 
                     </div>
@@ -284,60 +296,46 @@
 
     <script>
 
-    function cargarPagina(pagina) {
+        function cargarPagina(pagina) {
+            document.getElementById("panelInicio").style.display = "none";
+            var frame = document.getElementById("frameContenido");
+            frame.style.display = "block";
+            frame.src = pagina;
+        }
 
-                 document.getElementById("panelInicio").style.display = "none";
+        function mostrarInicio() {
+            document.getElementById("panelInicio").style.display = "block";
+            var frame = document.getElementById("frameContenido");
+            frame.style.display = "none";
+        }
 
-                 var frame = document.getElementById("frameContenido");
-                 frame.style.display = "block";
-                 frame.src = pagina;
+        // Grafico Linea
+        new Chart(document.getElementById('graficoInventario'), {
+            type: 'line',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                datasets: [{
+                    label: 'Movimientos',
+                    data: [40, 55, 60, 45, 70],
+                    borderColor: '#0a1f44',
+                    tension: 0.3,
+                    fill: true,
+                    backgroundColor: 'rgba(10,31,68,0.1)'
+                }]
+            }
+        });
 
-             }
-
-             function mostrarInicio() {
-
-                 document.getElementById("panelInicio").style.display = "block";
-
-                 var frame = document.getElementById("frameContenido");
-                 frame.style.display = "none";
-
-             }
-
-             // Grafico Linea
-             new Chart(document.getElementById('graficoInventario'), {
-
-                 type: 'line',
-
-                 data: {
-                     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
-
-                     datasets: [{
-                         label: 'Movimientos',
-                         data: [40, 55, 60, 45, 70],
-                         borderColor: '#0a1f44',
-                         tension: 0.3,
-                         fill: true,
-                         backgroundColor: 'rgba(10,31,68,0.1)'
-                     }]
-                 }
-
-             });
-
-             // Grafico Dona
-             new Chart(document.getElementById('graficoCategorias'), {
-
-                 type: 'doughnut',
-
-                 data: {
-                     labels: ['Medicamentos', 'Alimentos', 'Accesorios', 'Higiene'],
-
-                     datasets: [{
-                         data: [35, 40, 15, 10],
-                         backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545']
-                     }]
-                 }
-
-             });
+        // Grafico Dona
+        new Chart(document.getElementById('graficoCategorias'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Medicamentos', 'Alimentos', 'Accesorios', 'Higiene'],
+                datasets: [{
+                    data: [35, 40, 15, 10],
+                    backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545']
+                }]
+            }
+        });
 
     </script>
 

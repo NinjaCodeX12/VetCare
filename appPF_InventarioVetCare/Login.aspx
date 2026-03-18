@@ -25,14 +25,8 @@
         }
 
         .info-box {
-            color: white;
             padding: 80px;
         }
-
-            .info-box h1 {
-                font-size: 50px;
-                font-weight: bold;
-            }
 
         .login-card {
             background-color: white;
@@ -111,8 +105,7 @@
                                 OnClick="btnLogin_Click"
                                 runat="server"
                                 Text="Ingresar"
-                                CssClass="btn btn-vetcare"
-                                UseSubmitBehavior="false" />
+                                CssClass="btn btn-vetcare" />
                         </div>
 
                         <!-- EXTRA -->
@@ -138,50 +131,51 @@
         document.getElementById("<%= form1.ClientID %>").addEventListener("submit", function (e) {
 
             var correo = document.getElementById("<%= txtCorreo.ClientID %>").value.trim();
-            var password = document.getElementById("<%= txtPassword.ClientID %>").value.trim();
+        var password = document.getElementById("<%= txtPassword.ClientID %>").value.trim();
 
-            if (correo === "" && password === "") {
-                e.preventDefault();
-                Swal.fire({
-                    icon: "error",
-                    title: "Campos vacíos",
-                    text: "Debes ingresar correo y contraseña"
-                });
-                return;
-            }
+        if (correo === "" && password === "") {
+            e.preventDefault();
+            Swal.fire({
+                icon: "error",
+                title: "Campos vacíos",
+                text: "Debes ingresar correo y contraseña"
+            });
+            return;
+        }
 
-            if (correo === "") {
-                e.preventDefault();
-                Swal.fire({
-                    icon: "warning",
-                    title: "Falta correo",
-                    text: "Por favor ingresa tu correo"
-                });
-                return;
-            }
+        if (correo === "") {
+            e.preventDefault();
+            Swal.fire({
+                icon: "warning",
+                title: "Falta correo",
+                text: "Por favor ingresa tu correo"
+            });
+            return;
+        }
 
-            if (password === "") {
-                e.preventDefault();
-                Swal.fire({
-                    icon: "warning",
-                    title: "Falta contraseña",
-                    text: "Por favor ingresa tu contraseña"
-                });
-                return;
-            }
+        if (password === "") {
+            e.preventDefault();
+            Swal.fire({
+                icon: "warning",
+                title: "Falta contraseña",
+                text: "Por favor ingresa tu contraseña"
+            });
+            return;
+        }
 
-            // LOADING
-            setTimeout(() => {
-                Swal.fire({
-                    title: 'Verificando...',
-                    text: 'Validando usuario',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            }, 100);
-        });
+        // LOADING
+        setTimeout(() => {
+            Swal.fire({
+                title: 'Verificando...',
+                text: 'Validando usuario',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        }, 100);
+    });
     </script>
+
 </body>
 </html>
