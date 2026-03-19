@@ -9,13 +9,18 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 
     <style>
         body {
             margin: 0;
             height: 100vh;
+            font-family: 'Poppins', sans-serif;
         }
 
         .bg-login {
@@ -26,6 +31,16 @@
 
         .info-box {
             padding: 80px;
+        }
+
+        /* TITULO BONITO */
+        .titulo-bonito {
+            font-size: 52px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
 
         .login-card {
@@ -56,7 +71,7 @@
                 <!-- IZQUIERDA -->
                 <div class="col-md-7 d-flex flex-column justify-content-center info-box text-dark">
 
-                    <h1 class="fw-bold mb-3" style="font-size: 48px;">Bienvenido de nuevo 🐾
+                    <h1 class="titulo-bonito mb-3">Bienvenido a VetCare 🐾
                     </h1>
 
                     <p class="mt-3 fs-5" style="line-height: 1.6;">
@@ -131,50 +146,50 @@
         document.getElementById("<%= form1.ClientID %>").addEventListener("submit", function (e) {
 
             var correo = document.getElementById("<%= txtCorreo.ClientID %>").value.trim();
-        var password = document.getElementById("<%= txtPassword.ClientID %>").value.trim();
+            var password = document.getElementById("<%= txtPassword.ClientID %>").value.trim();
 
-        if (correo === "" && password === "") {
-            e.preventDefault();
-            Swal.fire({
-                icon: "error",
-                title: "Campos vacíos",
-                text: "Debes ingresar correo y contraseña"
-            });
-            return;
-        }
+            if (correo === "" && password === "") {
+                e.preventDefault();
+                Swal.fire({
+                    icon: "error",
+                    title: "Campos vacíos",
+                    text: "Debes ingresar correo y contraseña"
+                });
+                return;
+            }
 
-        if (correo === "") {
-            e.preventDefault();
-            Swal.fire({
-                icon: "warning",
-                title: "Falta correo",
-                text: "Por favor ingresa tu correo"
-            });
-            return;
-        }
+            if (correo === "") {
+                e.preventDefault();
+                Swal.fire({
+                    icon: "warning",
+                    title: "Falta correo",
+                    text: "Por favor ingresa tu correo"
+                });
+                return;
+            }
 
-        if (password === "") {
-            e.preventDefault();
-            Swal.fire({
-                icon: "warning",
-                title: "Falta contraseña",
-                text: "Por favor ingresa tu contraseña"
-            });
-            return;
-        }
+            if (password === "") {
+                e.preventDefault();
+                Swal.fire({
+                    icon: "warning",
+                    title: "Falta contraseña",
+                    text: "Por favor ingresa tu contraseña"
+                });
+                return;
+            }
 
-        // LOADING
-        setTimeout(() => {
-            Swal.fire({
-                title: 'Verificando...',
-                text: 'Validando usuario',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-        }, 100);
-    });
+            // LOADING
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'Verificando...',
+                    text: 'Validando usuario',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            }, 100);
+        });
     </script>
 
 </body>

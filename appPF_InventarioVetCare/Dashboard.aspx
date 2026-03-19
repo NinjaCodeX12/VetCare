@@ -9,98 +9,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            background-color: #f4f6f9;
-        }
-
-        .sidebar {
-            background: #0a1f44;
-            min-height: 100vh;
-            padding-top: 20px;
-        }
-
-            .sidebar h4 {
-                color: white;
-                font-weight: bold;
-                padding: 10px 20px;
-            }
-
-            .sidebar .nav-link {
-                color: rgba(255,255,255,0.8);
-                padding: 12px 20px;
-                transition: 0.3s;
-                font-size: 15px;
-            }
-
-                .sidebar .nav-link:hover {
-                    background: #133a7c;
-                    color: white;
-                }
-
-        /* TITULOS DEL MENU */
-        .menu-title {
-            color: rgba(255,255,255,0.5);
-            font-size: 12px;
-            padding: 10px 20px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .navbar-custom {
-            background: #0a1f44;
-            padding: 10px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .busqueda {
-            width: 400px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-        }
-
-            .busqueda::placeholder {
-                color: rgba(255,255,255,0.5);
-            }
-
-            .busqueda:focus {
-                background: rgba(255,255,255,0.2);
-                color: white;
-                box-shadow: none;
-                border-color: white;
-            }
-
-        .btn-buscar {
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            margin-left: -5px;
-        }
-
-        .main-content {
-            padding: 0;
-        }
-
-        .dashboard-container {
-            padding: 30px;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-        }
-
-        #frameContenido {
-            width: 100%;
-            height: calc(100vh - 120px);
-            border: none;
-        }
-    </style>
+    <link href="Recursos/CSS/Dashboard.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -112,8 +21,7 @@
 
                 <!-- SIDEBAR -->
                 <div class="col-md-2 sidebar shadow">
-
-                    <h4 class="text-center mb-4">VetCare</h4>
+                    <h4 class="text-center mb-4 d-flex align-items-center justify-content-center gap-2">VetCare</h4>
 
                     <ul class="nav flex-column">
 
@@ -170,14 +78,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item mt-3">
-                            <a class="nav-link text-danger" href="Login.aspx">
-                                <i class="fa fa-sign-out-alt me-2"></i>Cerrar Sesión
-                            </a>
-                        </li>
-
                     </ul>
-
                 </div>
 
                 <!-- CONTENIDO -->
@@ -186,30 +87,39 @@
                     <nav class="navbar navbar-expand-lg navbar-custom shadow-sm">
                         <div class="container-fluid">
 
-                            <div class="d-flex w-100 align-items-center justify-content-between">
-
-                                <div class="d-flex">
-                                    <input class="form-control me-2 busqueda" type="search" placeholder="Buscar productos..." />
-                                    <button class="btn btn-buscar" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
+                            <div class="d-flex w-100 align-items-center justify-content-end">
 
                                 <div class="text-white d-flex align-items-center">
+
                                     <i class="fa fa-bell me-4"></i>
                                     <i class="fa fa-envelope me-4"></i>
 
-                                    <div class="d-flex align-items-center">
-                                        <span class="me-2">Admin</span>
-                                        <i class="fa fa-user-circle fa-lg"></i>
+                                    <div class="dropdown">
+                                        <div class="d-flex align-items-center" data-bs-toggle="dropdown" style="cursor: pointer;">
+                                            <span class="me-2">Admin</span>
+                                            <i class="fa fa-user-circle fa-lg"></i>
+                                        </div>
+
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fa fa-user me-2"></i>Mi Perfil
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault()" data-bs-toggle="modal" data-bs-target="#modalCerrarSesion">
+                                                    <i class="fa fa-sign-out-alt me-2"></i>Cerrar sesión
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
 
                                 </div>
-
                             </div>
                         </div>
                     </nav>
 
+                    <!-- DASHBOARD -->
                     <div class="dashboard-container" id="inicio">
 
                         <div id="panelInicio">
@@ -264,7 +174,7 @@
                                     <div class="card shadow-sm">
                                         <div class="card-header bg-white fw-bold">Movimientos de Inventario</div>
                                         <div class="card-body">
-                                            <canvas id="graficoInventario" style="max-height: 300px;"></canvas>
+                                            <canvas id="graficoInventario"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -273,7 +183,7 @@
                                     <div class="card shadow-sm">
                                         <div class="card-header bg-white fw-bold">Categoría Productos</div>
                                         <div class="card-body">
-                                            <canvas id="graficoCategorias" style="max-height: 300px;"></canvas>
+                                            <canvas id="graficoCategorias"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -292,52 +202,37 @@
 
     </form>
 
+    <!-- MODAL -->
+    <div class="modal fade" id="modalCerrarSesion" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar cierre de sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p>¿Estás seguro de cerrar sesión?</p>
+
+                    <div id="loadingCerrar" style="display: none;">
+                        <div class="spinner-border text-primary mt-3"></div>
+                        <p class="mt-2">Cerrando sesión...</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-danger" onclick="cerrarSesion()">Sí, cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-
-        function cargarPagina(pagina) {
-            document.getElementById("panelInicio").style.display = "none";
-            var frame = document.getElementById("frameContenido");
-            frame.style.display = "block";
-            frame.src = pagina;
-        }
-
-        function mostrarInicio() {
-            document.getElementById("panelInicio").style.display = "block";
-            var frame = document.getElementById("frameContenido");
-            frame.style.display = "none";
-        }
-
-        // Grafico Linea
-        new Chart(document.getElementById('graficoInventario'), {
-            type: 'line',
-            data: {
-                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
-                datasets: [{
-                    label: 'Movimientos',
-                    data: [40, 55, 60, 45, 70],
-                    borderColor: '#0a1f44',
-                    tension: 0.3,
-                    fill: true,
-                    backgroundColor: 'rgba(10,31,68,0.1)'
-                }]
-            }
-        });
-
-        // Grafico Dona
-        new Chart(document.getElementById('graficoCategorias'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Medicamentos', 'Alimentos', 'Accesorios', 'Higiene'],
-                datasets: [{
-                    data: [35, 40, 15, 10],
-                    backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545']
-                }]
-            }
-        });
-
-    </script>
+    <script src="Recursos/JS/Dashboard.js"></script>
 
 </body>
 </html>

@@ -72,6 +72,8 @@
     <Content Include="Productos.aspx" />
     <Content Include="Recursos\CSS\Dashboard.css" />
     <Content Include="Recursos\IMG\Img_Login.png" />
+    <Content Include="Recursos\IMG\Logo.png" />
+    <Content Include="Recursos\JS\Dashboard.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
