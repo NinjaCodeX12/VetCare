@@ -6,59 +6,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - VetCare</title>
-
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-
+    <link href="Recursos/CSS/Login.css" rel="stylesheet" />
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            font-family: 'Poppins', sans-serif;
-        }
-
         .bg-login {
             background: url('Recursos/IMG/img_Login.png') no-repeat center center;
             background-size: cover;
             height: 100vh;
         }
-
-        .info-box {
-            padding: 80px;
-        }
-
-        /* TITULO BONITO */
-        .titulo-bonito {
-            font-size: 52px;
-            font-weight: 700;
-            background: linear-gradient(90deg, #f39c12, #e67e22);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-        }
-
-        .login-card {
-            background-color: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0px 5px 20px rgba(0,0,0,0.2);
-        }
-
-        .btn-vetcare {
-            background-color: #f39c12;
-            border: none;
-            color: white;
-        }
-
-            .btn-vetcare:hover {
-                background-color: #e67e22;
-            }
     </style>
 </head>
 <body>
@@ -96,9 +56,9 @@
 
                         <h3 class="text-center mb-4">Iniciar Sesión</h3>
 
-                        <!-- CORREO -->
+                        <!-- Usuario -->
                         <div class="mb-3">
-                            <label class="form-label">Correo Electrónico</label>
+                            <label class="form-label">Usuario</label>
                             <asp:TextBox ID="txtCorreo" runat="server" CssClass="form-control" placeholder="Ingrese su correo"></asp:TextBox>
                         </div>
 
@@ -106,12 +66,6 @@
                         <div class="mb-3">
                             <label class="form-label">Contraseña</label>
                             <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" placeholder="Ingrese su contraseña"></asp:TextBox>
-                        </div>
-
-                        <!-- RECORDAR -->
-                        <div class="form-check mb-3">
-                            <asp:CheckBox ID="chkRecordar" runat="server" CssClass="form-check-input" />
-                            <label class="form-check-label">Recordarme</label>
                         </div>
 
                         <!-- BOTON -->
@@ -140,9 +94,8 @@
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- VALIDACIONES FRONTEND -->
     <script>
+
         document.getElementById("<%= form1.ClientID %>").addEventListener("submit", function (e) {
 
             var correo = document.getElementById("<%= txtCorreo.ClientID %>").value.trim();
@@ -191,6 +144,5 @@
             }, 100);
         });
     </script>
-
 </body>
 </html>

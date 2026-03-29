@@ -1,0 +1,38 @@
+﻿body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+
+.info-box {
+    padding: 80px;
+}
+
+/* TITULO BONITO */
+.titulo-bonito {
+    font-size: 52px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #f39c12, #e67e22);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+}
+
+.login-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.2);
+}
+
+.btn-vetcare {
+    background-color: #f39c12;
+    border: none;
+    color: white;
+}
+
+    .btn-vetcare:hover {
+        background-color: #e67e22;
+    }

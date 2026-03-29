@@ -9,6 +9,7 @@ namespace appPF_InventarioVetCare
     {
         protected void btnLogin_Click(object sender, EventArgs e)
         {
+            //Validamos los datos para el login 
             string conexion = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(conexion))
