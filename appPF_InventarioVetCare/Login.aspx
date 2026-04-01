@@ -130,7 +130,7 @@
                 });
                 return;
             }
-
+            
             // LOADING
             setTimeout(() => {
                 Swal.fire({

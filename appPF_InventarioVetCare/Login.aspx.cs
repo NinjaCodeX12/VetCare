@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.UI;
 
 namespace appPF_InventarioVetCare
 {
@@ -33,7 +34,16 @@ namespace appPF_InventarioVetCare
                 }
                 else
                 {
-   
+                    // SCRIPT PARA MOSTRAR LA ALERTA DE ERROR
+                    string script = @"Swal.fire({
+                        icon: 'error',
+                        title: 'Acceso Denegado',
+                        text: 'El usuario o la contraseña son incorrectos.',
+                        confirmButtonColor: '#3085d6'
+                    });";
+
+                    // Ejecuta el script en la página
+                    ScriptManager.RegisterStartupScript(this, GetType(), "errorLogin", script, true);
                 }
             }
         }
