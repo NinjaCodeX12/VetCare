@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -12,10 +9,13 @@ namespace appPF_InventarioVetCare
 {
     public partial class Productos : System.Web.UI.Page
     {
+        // Cadena de conexión obtenida desde Web.config
         string strConexion = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
 
+        // Evento que se ejecuta al cargar la página
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Se ejecuta solo la primera vez
             if (!IsPostBack)
             {
                 ListarProductos();
@@ -23,54 +23,68 @@ namespace appPF_InventarioVetCare
             }
         }
 
+        // Método para cargar las categorías en el DropDownList
         void CargarCategorias()
         {
             using (SqlConnection con = new SqlConnection(strConexion))
             {
-                // Usaremos el mismo SP que crearemos para el CRUD de categorías
                 SqlCommand cmd = new SqlCommand("SP_ListarCategorias", con);
                 cmd.CommandType = CommandType.StoredProcedure;
+
                 con.Open();
 
+                // Se enlazan las categorías al DropDownList
                 ddlCategoria.DataSource = cmd.ExecuteReader();
-                ddlCategoria.DataTextField = "nombre"; // Lo que el usuario lee
-                ddlCategoria.DataValueField = "id_categoria";     // El ID que se guarda
+                ddlCategoria.DataTextField = "nombre";
+                ddlCategoria.DataValueField = "id_categoria";
                 ddlCategoria.DataBind();
 
-                // Agregamos una opción neutra al inicio
+                // Se agrega una opción inicial
                 ddlCategoria.Items.Insert(0, new ListItem("-- Seleccione Categoría --", "0"));
             }
         }
 
+        // Método para listar los productos
         void ListarProductos()
         {
             using (SqlConnection con = new SqlConnection(strConexion))
             {
                 SqlCommand cmd = new SqlCommand("SP_ListarProductos", con);
                 cmd.CommandType = CommandType.StoredProcedure;
+
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
+                // Se enlazan los datos al GridView
                 gvProductos.DataSource = dt;
                 gvProductos.DataBind();
 
-                // Actualizar contadores dinámicos
+                // Se actualizan los indicadores
                 lblTotal.Text = dt.Rows.Count.ToString();
+
+                // Se calcula cuántos productos tienen stock crítico
                 object criticos = dt.Compute("Count(id_producto)", "stock_actual < 5");
                 lblCritico.Text = criticos.ToString();
             }
         }
 
+        // Método para guardar o actualizar un producto
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            // Se define el procedimiento según sea insertar o editar
             string sp = (hfIdProducto.Value == "0") ? "SP_InsertarProducto" : "SP_EditarProducto";
+
             using (SqlConnection con = new SqlConnection(strConexion))
             {
                 SqlCommand cmd = new SqlCommand(sp, con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                if (hfIdProducto.Value != "0") cmd.Parameters.AddWithValue("@id_producto", hfIdProducto.Value);
 
+                // Si es edición, se envía el ID
+                if (hfIdProducto.Value != "0")
+                    cmd.Parameters.AddWithValue("@id_producto", hfIdProducto.Value);
+
+                // Se envían los datos del formulario
                 cmd.Parameters.AddWithValue("@nombre", txtNombre.Text.Trim());
                 cmd.Parameters.AddWithValue("@descripcion", "VetCare Pro");
                 cmd.Parameters.AddWithValue("@stock_actual", int.Parse(txtStock.Text));
@@ -82,53 +96,71 @@ namespace appPF_InventarioVetCare
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
+
+            // Se limpian los campos y se actualiza la lista
             Limpiar();
             ListarProductos();
         }
 
+        // Evento para seleccionar un producto y cargarlo en el formulario
         protected void gvProductos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Obtenemos el índice de la fila seleccionada
             int index = gvProductos.SelectedIndex;
 
-            // JALAMOS LOS DATOS DIRECTO DE LOS DATAKEYS (Sin HTML)
+            // Se obtienen los datos desde DataKeys
             hfIdProducto.Value = gvProductos.DataKeys[index].Values["id_producto"].ToString();
             txtNombre.Text = gvProductos.DataKeys[index].Values["nombre"].ToString();
             txtPrecio.Text = gvProductos.DataKeys[index].Values["precio_venta"].ToString();
             txtStock.Text = gvProductos.DataKeys[index].Values["stock_actual"].ToString();
 
-            // También seleccionamos la categoría correcta en el combo
+            // Se selecciona la categoría correspondiente
             string idCat = gvProductos.DataKeys[index].Values["id_categoria"].ToString();
             if (ddlCategoria.Items.FindByValue(idCat) != null)
             {
                 ddlCategoria.SelectedValue = idCat;
             }
 
-            // Cambiar visual del botón
+            // Se cambia el botón a modo edición
             btnGuardar.Text = "Actualizar Registro";
             btnGuardar.CssClass = "btn btn-modern btn-warning shadow-sm";
         }
 
+        // Método para eliminar un producto
         protected void gvProductos_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             int id = Convert.ToInt32(gvProductos.DataKeys[e.RowIndex].Value);
+
             using (SqlConnection con = new SqlConnection(strConexion))
             {
                 SqlCommand cmd = new SqlCommand("SP_EliminarProducto", con);
                 cmd.CommandType = CommandType.StoredProcedure;
+
                 cmd.Parameters.AddWithValue("@id_producto", id);
+
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
+
+            // Se actualiza la lista después de eliminar
             ListarProductos();
         }
 
-        protected void btnLimpiar_Click(object sender, EventArgs e) { Limpiar(); }
+        // Evento del botón limpiar
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
+        }
 
+        // Método para limpiar los campos del formulario
         void Limpiar()
         {
             hfIdProducto.Value = "0";
-            txtNombre.Text = ""; txtPrecio.Text = ""; txtStock.Text = "";
+
+            txtNombre.Text = "";
+            txtPrecio.Text = "";
+            txtStock.Text = "";
+
+            // Se restablece el botón a modo guardar
             btnGuardar.Text = "Guardar Cambios";
             btnGuardar.CssClass = "btn btn-modern btn-primary shadow-sm";
         }
