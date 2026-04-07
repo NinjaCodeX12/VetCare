@@ -3,145 +3,182 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>VetCare Pro - Categorías</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>VetCare Pro - Categorías</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-<link href="Recursos/CSS/Productos.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
 
-<!-- 🔥 ESTILO EXTRA SOLO PARA PAGINACIÓN -->
-<style>
-    .pagination {
-        justify-content: center;
-        margin-top: 15px;
-    }
+        div.dataTables_filter {
+            float: right;
+            margin-bottom: 15px;
+        }
 
-    .pagination a,
-    .pagination span {
-        padding: 6px 12px;
-        margin: 2px;
-        border-radius: 8px;
-        text-decoration: none;
-        border: 1px solid #e2e8f0;
-        color: #334155;
-        font-weight: 500;
-    }
-
-    .pagination span {
-        background: #3b82f6;
-        color: white;
-        border: none;
-    }
-
-    .pagination a:hover {
-        background: #f1f5f9;
-    }
-</style>
-
+        div.dataTables_length {
+            float: left;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 
 <body>
-<form id="form1" runat="server">
+    <form id="form1" runat="server">
 
-<div class="container py-5">
+        <!-- IMPORTANTE -->
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <h2 class="fw-bold mb-0">
-            Categorías <span class="text-primary">VetCare</span>
-        </h2>
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>
 
-        <div class="glass-card d-flex gap-5 py-3 px-4 shadow-sm">
-            <div class="text-center">
-                <small class="text-muted d-block fw-bold">TOTAL</small>
-                <asp:Label ID="lblTotalCat" runat="server"
-                    Text="0"
-                    CssClass="fw-bold h4 mb-0 text-primary"></asp:Label>
-            </div>
-        </div>
-    </div>
+                <div class="container py-5">
 
-    <div class="row g-4">
+                    <div class="d-flex justify-content-between align-items-center mb-5">
+                        <h2 class="fw-bold mb-0">Categorías <span class="text-primary">VetCare</span></h2>
 
-        <!-- FORM -->
-        <div class="col-lg-4">
-            <div class="glass-card">
-                <h5 class="fw-bold mb-4">Registro Rápido</h5>
+                        <div class="text-center">
+                            <small class="text-muted d-block fw-bold">TOTAL</small>
+                            <asp:Label ID="lblTotalCat" runat="server"
+                                Text="0"
+                                CssClass="fw-bold h4 mb-0 text-primary"></asp:Label>
+                        </div>
+                    </div>
 
-                <div class="mb-4">
-                    <label class="form-label small fw-bold">Nombre Categoría</label>
-                    <asp:TextBox ID="txtNombreCat" runat="server"
-                        CssClass="form-control form-control-lg"
-                        placeholder="Ej. Medicinas"></asp:TextBox>
+                    <div class="row g-4">
+
+                        <!-- FORM -->
+                        <div class="col-lg-4">
+                            <div class="card shadow-sm p-4">
+                                <h5 class="fw-bold mb-4">Registro Rápido</h5>
+
+                                <div class="mb-4">
+                                    <label class="form-label">Nombre Categoría</label>
+                                    <asp:TextBox ID="txtNombreCat" runat="server"
+                                        CssClass="form-control"
+                                        placeholder="Ej. Medicinas"></asp:TextBox>
+                                </div>
+
+                                <asp:Button ID="btnGuardarCat" runat="server"
+                                    Text="Guardar"
+                                    CssClass="btn btn-primary w-100"
+                                    OnClick="btnGuardarCat_Click"
+                                    UseSubmitBehavior="false" />
+                            </div>
+                        </div>
+
+                        <!-- TABLA -->
+                        <div class="col-lg-8">
+                            <div class="card shadow-lg border-0 rounded-4">
+                                <div class="card-body">
+
+                                    <h5 class="fw-bold mb-4 text-primary">Lista de Categorías</h5>
+
+                                    <table id="tablaCategorias" class="table table-hover align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Categoría</th>
+                                                <th class="text-center">Acciones</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <asp:Repeater ID="rpCategorias" runat="server">
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td><%# Eval("id_categoria") %></td>
+
+                                                        <td>
+                                                            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                                                                <%# Eval("nombre") %>
+                                                            </span>
+                                                        </td>
+
+                                                        <td class="text-center">
+                                                            <button type="button"
+                                                                class="btn btn-outline-danger btn-sm"
+                                                                onclick="confirmarEliminar(<%# Eval("id_categoria") %>)">
+                                                                Eliminar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="d-grid gap-2">
-                    <asp:Button ID="btnGuardarCat" runat="server"
-                        Text="Guardar"
-                        CssClass="btn btn-modern btn-primary shadow-sm"
-                        OnClick="btnGuardarCat_Click" />
-                </div>
-            </div>
-        </div>
+                <asp:Button ID="btnEliminarHidden" runat="server" Style="display: none;" OnClick="EliminarCategoria" />
+                <asp:HiddenField ID="hfIdEliminar" runat="server" />
 
-        <!-- TABLA -->
-        <div class="col-lg-8">
-            <div class="glass-card shadow-sm">
-                <h5 class="fw-bold mb-4 text-secondary">Lista de Categorías</h5>
+            </ContentTemplate>
+        </asp:UpdatePanel>
 
-                <div class="table-responsive">
+    </form>
 
-                    <asp:GridView ID="gvCategorias" runat="server"
-                        CssClass="table custom-grid"
-                        AutoGenerateColumns="False"
-                        AllowPaging="True"
-                        PageSize="5"
-                        DataKeyNames="id_categoria"
-                        OnPageIndexChanging="gvCategorias_PageIndexChanging"
-                        OnRowDeleting="gvCategorias_RowDeleting"
-                        
-                        PagerStyle-CssClass="pagination"
-                        PagerSettings-Mode="Numeric"
-                        PagerSettings-Position="Bottom">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-                        <Columns>
+    <script>
 
-                            <asp:TemplateField HeaderText="#">
-                                <ItemTemplate>
-                                    <%# Container.DataItemIndex + 1 + (gvCategorias.PageIndex * gvCategorias.PageSize) %>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+        function cargarTabla() {
+            $('#tablaCategorias').DataTable({
+                destroy: true,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                }
+            });
+        }
 
-                            <asp:BoundField DataField="id_categoria" HeaderText="ID" />
+        $(document).ready(function () {
+            cargarTabla();
+        });
 
-                            <asp:BoundField DataField="nombre" HeaderText="Categoría" />
+        // REINICIAR DATATABLE DESPUÉS DEL UPDATEPANEL
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+            cargarTabla();
+        });
 
-                            <asp:TemplateField HeaderText="Acciones">
-                                <ItemTemplate>
-                                    <asp:LinkButton runat="server"
-                                        CommandName="Delete"
-                                        CssClass="btn btn-sm btn-light text-danger"
-                                        OnClientClick="return confirm('¿Eliminar categoría?');">
-                                        <i class="fas fa-trash"></i>
-                                    </asp:LinkButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+        function mensajeGuardado() {
+            Swal.fire("Éxito", "Categoría registrada correctamente", "success");
+        }
 
-                        </Columns>
+        function mensajeEliminado() {
+            Swal.fire("Eliminado", "La categoría fue eliminada", "success");
+        }
 
-                    </asp:GridView>
+        function confirmarEliminar(id) {
+            Swal.fire({
+                title: "¿Eliminar?",
+                text: "¿Estas Seguro de Eliminar esta Categoria?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí",
+                cancelButtonText: "No"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('<%= hfIdEliminar.ClientID %>').value = id;
+                    document.getElementById('<%= btnEliminarHidden.ClientID %>').click();
+                }
+            });
+        }
 
-                </div>
-            </div>
-        </div>
+    </script>
 
-    </div>
-
-</div>
-
-</form>
 </body>
 </html>

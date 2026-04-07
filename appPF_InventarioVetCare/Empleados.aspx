@@ -8,7 +8,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 
     <style>
         body {
@@ -16,28 +16,18 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        .glass-card {
-            background: white;
+        div.dataTables_filter {
+            float: right;
+            margin-bottom: 15px;
+        }
+
+        div.dataTables_length {
+            float: left;
+            margin-bottom: 15px;
+        }
+
+        .card {
             border-radius: 16px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
-            padding: 30px;
-            border: 1px solid #edf2f7;
-        }
-
-        .btn-modern {
-            border-radius: 10px;
-            padding: 12px;
-            font-weight: 600;
-        }
-
-        .custom-grid th {
-            background: #f1f5f9 !important;
-            font-size: 0.75rem;
-            padding: 20px !important;
-        }
-
-        .custom-grid td {
-            padding: 22px !important;
         }
     </style>
 </head>
@@ -45,115 +35,218 @@
 <body>
     <form runat="server">
 
-        <div class="container py-5">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
 
-            <!-- HEADER -->
-            <div class="d-flex justify-content-between align-items-center mb-5">
-                <h2 class="fw-bold mb-0">Gestión <span class="text-primary">Empleados</span></h2>
-            </div>
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>
 
-            <!-- ALERTA -->
-            <asp:Panel ID="alerta" runat="server" Visible="false" CssClass="alert">
-                <asp:Label ID="lblAlerta" runat="server"></asp:Label>
-            </asp:Panel>
+                <div class="container py-5">
 
-            <div class="row g-4">
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-5">
+                        <h2 class="fw-bold mb-0">Empleados <span class="text-primary">VetCare</span></h2>
 
-                <!-- FORMULARIO -->
-                <div class="col-lg-4">
-                    <div class="glass-card">
+                        <div class="text-center">
+                            <small class="text-muted d-block fw-bold">TOTAL</small>
+                            <asp:Label ID="lblTotalEmp" runat="server"
+                                Text="0"
+                                CssClass="fw-bold h4 mb-0 text-primary"></asp:Label>
+                        </div>
+                    </div>
 
-                        <h5 class="fw-bold mb-4">Registro Rápido</h5>
+                    <div class="row g-4">
 
-                        <asp:HiddenField ID="hfId" runat="server" />
+                        <!-- FORM -->
+                        <div class="col-lg-4">
+                            <div class="card shadow-sm p-4">
+                                <h5 class="fw-bold mb-4">Registro Rápido</h5>
 
-                        <div class="mb-4">
-                            <label class="fw-bold">Nombre</label>
-                            <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control form-control-lg" />
+                                <asp:HiddenField ID="hfId" runat="server" />
+
+                                <div class="mb-4">
+                                    <label>Nombre</label>
+                                    <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" />
+                                </div>
+
+                                <div class="mb-4">
+                                    <label>Apellido</label>
+                                    <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" />
+                                </div>
+
+                                <div class="mb-4">
+                                    <label>DNI</label>
+                                    <asp:TextBox ID="txtDni" runat="server" CssClass="form-control" />
+                                </div>
+
+                                <div class="mb-4">
+                                    <label>Teléfono</label>
+                                    <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" />
+                                </div>
+
+                                <div class="d-grid gap-2">
+
+                                    <!-- BOTÓN GUARDAR -->
+                                    <asp:Button ID="btnGuardar" runat="server"
+                                        Text="Guardar"
+                                        CssClass="btn btn-primary w-100"
+                                        OnClick="btnGuardar_Click"
+                                        UseSubmitBehavior="false" />
+
+                                    <!-- BOTÓN LIMPIAR -->
+                                    <asp:Button ID="btnLimpiar" runat="server"
+                                        Text="Limpiar"
+                                        class="btn btn-secondary w-100"
+                                        OnClick="btnLimpiar_Click"
+                                        UseSubmitBehavior="false" />
+
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="fw-bold">Apellido</label>
-                            <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control form-control-lg" />
-                        </div>
+                        <!-- TABLA -->
+                        <div class="col-lg-8">
+                            <div class="card shadow-lg border-0 rounded-4">
+                                <div class="card-body">
 
-                        <div class="mb-4">
-                            <label class="fw-bold">DNI</label>
-                            <asp:TextBox ID="txtDni" runat="server" CssClass="form-control form-control-lg" />
-                        </div>
+                                    <h5 class="fw-bold mb-4 text-primary">Lista de Empleados</h5>
 
-                        <div class="mb-4">
-                            <label class="fw-bold">Teléfono</label>
-                            <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control form-control-lg" />
-                        </div>
+                                    <table id="tablaEmpleados" class="table table-hover align-middle">
 
-                        <div class="d-grid gap-2">
-                            <asp:Button ID="btnGuardar" runat="server"
-                                Text="Guardar Cambios"
-                                CssClass="btn btn-modern btn-primary"
-                                OnClick="btnGuardar_Click" />
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Empleado</th>
+                                                <th>DNI</th>
+                                                <th>Teléfono</th>
+                                                <th class="text-center">Acciones</th>
+                                            </tr>
+                                        </thead>
 
-                            <asp:LinkButton ID="btnLimpiar" runat="server"
-                                CssClass="btn btn-link text-muted"
-                                OnClick="btnLimpiar_Click">
-                        Limpiar campos
-                            </asp:LinkButton>
+                                        <tbody>
+                                            <asp:Repeater ID="rpEmpleados" runat="server">
+                                                <ItemTemplate>
+                                                    <tr>
+
+                                                        <td><%# Eval("id_empleado") %></td>
+
+                                                        <td>
+                                                            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                                                                <%# Eval("nombre") %> <%# Eval("apellido") %>
+                                                            </span>
+                                                        </td>
+
+                                                        <td><%# Eval("dni") %></td>
+
+                                                        <td><%# Eval("telefono") %></td>
+
+                                                        <td class="text-center">
+
+                                                            <button type="button"
+                                                                class="btn btn-warning btn-sm me-2"
+                                                                onclick="editarEmpleado(
+                                                '<%# Eval("id_empleado") %>',
+                                                '<%# Eval("nombre") %>',
+                                                '<%# Eval("apellido") %>',
+                                                '<%# Eval("dni") %>',
+                                                '<%# Eval("telefono") %>')">
+                                                                Editar
+                                                            </button>
+
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-sm"
+                                                                onclick="confirmarEliminar(<%# Eval("id_empleado") %>)">
+                                                                Eliminar
+                                                            </button>
+
+                                                        </td>
+
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
                         </div>
 
                     </div>
+
                 </div>
 
-                <!-- TABLA -->
-                <div class="col-lg-8">
-                    <div class="glass-card">
-                        <h5 class="fw-bold mb-4 text-secondary">Lista de Empleados</h5>
+                <!-- ELIMINAR -->
+                <asp:Button ID="btnEliminarHidden" runat="server" Style="display: none;" OnClick="EliminarEmpleado" />
+                <asp:HiddenField ID="hfEliminar" runat="server" />
 
-                        <asp:GridView ID="gvEmpleados" runat="server"
-                            CssClass="table custom-grid"
-                            AutoGenerateColumns="False"
-                            OnSelectedIndexChanged="gvEmpleados_SelectedIndexChanged"
-                            OnRowDeleting="gvEmpleados_RowDeleting"
-                            DataKeyNames="id_empleado,nombre,apellido,dni,telefono">
-
-                            <Columns>
-
-                                <asp:BoundField DataField="id_empleado" HeaderText="ID" />
-
-                                <asp:TemplateField HeaderText="Empleado">
-                                    <ItemTemplate>
-                                        <div class="fw-bold">
-                                            <%# Eval("nombre") %> <%# Eval("apellido") %>
-                                        </div>
-                                        <small class="text-muted">DNI: <%# Eval("dni") %></small>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-
-                                <asp:BoundField DataField="telefono" HeaderText="Teléfono" />
-
-                                <asp:TemplateField HeaderText="Acciones">
-                                    <ItemTemplate>
-                                        <asp:LinkButton runat="server" CommandName="Select"
-                                            CssClass="btn btn-sm btn-light text-warning me-2">
-                                    <i class="fas fa-edit"></i>
-                                        </asp:LinkButton>
-
-                                        <asp:LinkButton runat="server" CommandName="Delete"
-                                            CssClass="btn btn-sm btn-light text-danger"
-                                            OnClientClick="return confirm('¿Eliminar?');">
-                                    <i class="fas fa-trash"></i>
-                                        </asp:LinkButton>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-
-                            </Columns>
-                        </asp:GridView>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
 
     </form>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+        function cargarTabla() {
+            $('#tablaEmpleados').DataTable({
+                destroy: true,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            cargarTabla();
+        });
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+            cargarTabla();
+        });
+
+        function mensajeGuardado() {
+            Swal.fire("Éxito", "Empleado guardado correctamente", "success");
+        }
+
+        function mensajeEliminado() {
+            Swal.fire("Eliminado", "Empleado eliminado", "success");
+        }
+
+
+        function mensajeError(msg) {
+            Swal.fire("Error", msg, "error");
+        }
+
+        function confirmarEliminar(id) {
+            Swal.fire({
+                title: "¿Eliminar?",
+                text: "¿Seguro que deseas eliminar este empleado?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí",
+                cancelButtonText: "No"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('<%= hfEliminar.ClientID %>').value = id;
+                    document.getElementById('<%= btnEliminarHidden.ClientID %>').click();
+                }
+            });
+        }
+
+        function editarEmpleado(id, nombre, apellido, dni, telefono) {
+            document.getElementById('<%= hfId.ClientID %>').value = id;
+            document.getElementById('<%= txtNombre.ClientID %>').value = nombre;
+            document.getElementById('<%= txtApellido.ClientID %>').value = apellido;
+            document.getElementById('<%= txtDni.ClientID %>').value = dni;
+            document.getElementById('<%= txtTelefono.ClientID %>').value = telefono;
+
+            Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'Modo edición activado', showConfirmButton: false, timer: 2000 });
+        }
+
+    </script>
+
 </body>
 </html>

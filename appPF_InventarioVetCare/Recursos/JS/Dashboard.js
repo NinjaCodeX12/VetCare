@@ -30,31 +30,3 @@ function cerrarSesion() {
         window.location.href = "Login.aspx";
     }, 2000);
 }
-
-// Gráfico de líneas para mostrar movimientos de inventario
-new Chart(document.getElementById('graficoInventario'), {
-    type: 'line', // Tipo de gráfico: línea
-    data: {
-        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'], // Meses
-        datasets: [{
-            label: 'Movimientos', // Nombre del dataset
-            data: [40, 55, 60, 45, 70], // Datos del gráfico
-            borderColor: '#0a1f44', // Color de la línea
-            tension: 0.3, // Suavizado de la línea
-            fill: true, // Relleno debajo de la línea
-            backgroundColor: 'rgba(10,31,68,0.1)' // Color del relleno
-        }]
-    }
-});
-
-// Gráfico tipo dona para categorías de productos
-new Chart(document.getElementById('graficoCategorias'), {
-    type: 'doughnut', // Tipo de gráfico: dona
-    data: {
-        labels: ['Medicamentos', 'Alimentos', 'Accesorios', 'Higiene'], // Categorías
-        datasets: [{
-            data: [35, 40, 15, 10], // Valores de cada categoría
-            backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545'] // Colores de cada sección
-        }]
-    }
-});

@@ -2,25 +2,23 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.UI;
 
 namespace appPF_InventarioVetCare
 {
     public partial class Empleados : System.Web.UI.Page
     {
-        // Cadena de conexión obtenida desde Web.config
         string cn = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
 
-        // Evento que se ejecuta al cargar la página
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Se ejecuta solo la primera vez
             if (!IsPostBack)
             {
                 listar();
             }
         }
 
-        // Método para listar los empleados
+        // LISTAR EMPLEADOS
         void listar()
         {
             using (SqlConnection con = new SqlConnection(cn))
@@ -31,13 +29,16 @@ namespace appPF_InventarioVetCare
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                // Se enlazan los datos al GridView
-                gvEmpleados.DataSource = dt;
-                gvEmpleados.DataBind();
+                // Repeater (como categorías)
+                rpEmpleados.DataSource = dt;
+                rpEmpleados.DataBind();
+
+                // Total
+                lblTotalEmp.Text = dt.Rows.Count.ToString();
             }
         }
 
-        // Método para guardar o actualizar un empleado
+        // GUARDAR / ACTUALIZAR
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             try
@@ -46,7 +47,7 @@ namespace appPF_InventarioVetCare
                 {
                     SqlCommand cmd;
 
-                    // Se determina si es insertar o actualizar
+                    // Insertar o actualizar
                     if (string.IsNullOrEmpty(hfId.Value))
                         cmd = new SqlCommand("sp_insertar_empleado", con);
                     else
@@ -54,11 +55,9 @@ namespace appPF_InventarioVetCare
 
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    // Si es actualización, se envía el ID
                     if (!string.IsNullOrEmpty(hfId.Value))
                         cmd.Parameters.AddWithValue("@id_empleado", hfId.Value);
 
-                    // Se envían los datos del formulario
                     cmd.Parameters.AddWithValue("@nombre", txtNombre.Text.Trim());
                     cmd.Parameters.AddWithValue("@apellido", txtApellido.Text.Trim());
                     cmd.Parameters.AddWithValue("@dni", txtDni.Text.Trim());
@@ -68,83 +67,51 @@ namespace appPF_InventarioVetCare
                     cmd.ExecuteNonQuery();
                 }
 
-                // Mensaje de éxito
-                alerta.Visible = true;
-                alerta.CssClass = "alert alert-success";
-                lblAlerta.Text = "Guardado correctamente";
-
-                // Se actualiza la lista y se limpian los campos
                 listar();
                 limpiar();
+
+                // SweetAlert OK
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                    "ok", "mensajeGuardado();", true);
             }
             catch (Exception ex)
             {
-                // Mensaje de error
-                alerta.Visible = true;
-                alerta.CssClass = "alert alert-danger";
-                lblAlerta.Text = ex.Message;
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                    "err", $"mensajeError('{ex.Message.Replace("'", "")}');", true);
             }
         }
 
-        // Evento para seleccionar un empleado y cargarlo en el formulario
-        protected void gvEmpleados_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Se obtiene el ID del empleado seleccionado
-            hfId.Value = gvEmpleados.SelectedDataKey.Values["id_empleado"].ToString();
-
-            // Se cargan los datos en los campos del formulario
-            txtNombre.Text = gvEmpleados.SelectedDataKey.Values["nombre"].ToString();
-            txtApellido.Text = gvEmpleados.SelectedDataKey.Values["apellido"].ToString();
-            txtDni.Text = gvEmpleados.SelectedDataKey.Values["dni"].ToString();
-            txtTelefono.Text = gvEmpleados.SelectedDataKey.Values["telefono"].ToString();
-
-            // Se muestra mensaje indicando modo edición
-            alerta.Visible = true;
-            alerta.CssClass = "alert alert-info";
-            lblAlerta.Text = "Editando empleado seleccionado";
-        }
-
-        // Método para eliminar un empleado desde el GridView
-        protected void gvEmpleados_RowDeleting(object sender, System.Web.UI.WebControls.GridViewDeleteEventArgs e)
+        // ELIMINAR (como categorías)
+        protected void EliminarEmpleado(object sender, EventArgs e)
         {
             try
             {
+                int id = Convert.ToInt32(hfEliminar.Value);
+
                 using (SqlConnection con = new SqlConnection(cn))
                 {
                     SqlCommand cmd = new SqlCommand("sp_eliminar_empleado", con);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    // Se obtiene el ID del empleado a eliminar
-                    cmd.Parameters.AddWithValue("@id_empleado",
-                        gvEmpleados.DataKeys[e.RowIndex].Value);
+                    cmd.Parameters.AddWithValue("@id_empleado", id);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
 
-                // Mensaje de eliminación
-                alerta.Visible = true;
-                alerta.CssClass = "alert alert-warning";
-                lblAlerta.Text = "Empleado eliminado";
-
                 listar();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                    "del", "mensajeEliminado();", true);
             }
             catch
             {
-                // Mensaje de error
-                alerta.Visible = true;
-                alerta.CssClass = "alert alert-danger";
-                lblAlerta.Text = "Error al eliminar";
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                    "err", "mensajeError('Error al eliminar');", true);
             }
         }
 
-        // Evento del botón limpiar
-        protected void btnLimpiar_Click(object sender, EventArgs e)
-        {
-            limpiar();
-        }
-
-        // Método para limpiar los campos del formulario
+        // LIMPIAR FORM
         void limpiar()
         {
             hfId.Value = "";
@@ -153,5 +120,10 @@ namespace appPF_InventarioVetCare
             txtDni.Text = "";
             txtTelefono.Text = "";
         }
+
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            limpiar();
+        }
     }
-}   
+}
